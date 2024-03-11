@@ -45,19 +45,6 @@ public class GenreService {
 
     private static Genre getGenre(String hrefValue) {
         var name = hrefValue.substring("/genres/".length());
-        if (name.indexOf('-') == name.length() - 2) {
-            name = name.replace('-', '\'');
-        } else if (name.indexOf('-') > -1) {
-            name = name.replace('-', ' ');
-        }
-
-        name = name.substring(0, 1).toUpperCase() + name.substring(1);
-        var spaceIndex = name.indexOf(' ');
-        if (spaceIndex > -1) {
-            name = name.substring(0, spaceIndex + 1) +
-                    name.substring(spaceIndex + 1, spaceIndex + 2).toUpperCase() +
-                    name.substring(spaceIndex + 2);
-        }
         Genre genre = new Genre();
         genre.setName(name);
         return genre;
