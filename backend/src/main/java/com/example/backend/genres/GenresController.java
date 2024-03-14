@@ -8,10 +8,11 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
-@RequestMapping("/genre")
+@RequestMapping("/genres")
 public class GenreController {
     @Autowired
     GenreService genreService;
+
     @GetMapping()
     public List<Genre> getGenres() {
         return genreService.findAll();
