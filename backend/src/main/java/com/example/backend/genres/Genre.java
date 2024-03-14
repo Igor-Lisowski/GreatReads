@@ -1,4 +1,4 @@
-package com.example.backend.genre;
+package com.example.backend.genres;
 
 
 import jakarta.persistence.*;

@@ -1,4 +1,4 @@
-package com.example.backend.genre;
+package com.example.backend.genres;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -9,12 +9,12 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/genres")
-public class GenreController {
+public class GenresController {
     @Autowired
-    GenreService genreService;
+    GenresService genresService;
 
     @GetMapping()
     public List<Genre> getGenres() {
-        return genreService.findAll();
+        return genresService.findAll();
     }
 }

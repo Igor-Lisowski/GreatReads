@@ -1,8 +1,8 @@
-package com.example.backend.genre;
+package com.example.backend.genres;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface GenreRepository extends JpaRepository<Genre,Long> {
+public interface GenresRepository extends JpaRepository<Genre, Long> {
 }
