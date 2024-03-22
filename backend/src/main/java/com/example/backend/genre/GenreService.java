@@ -1,4 +1,4 @@
-package com.example.backend.genres;
+package com.example.backend.genre;
 
 import org.jsoup.Jsoup;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,12 +9,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
-public class GenresService {
+public class GenreService {
     @Autowired
-    GenresRepository genresRepository;
+    GenreRepository genreRepository;
 
     public List<Genre> findAll() {
-        var genres = this.genresRepository.findAll();
+        var genres = this.genreRepository.findAll();
         if (!genres.isEmpty()) {
             return genres;
         }
@@ -34,7 +34,7 @@ public class GenresService {
                         continue;
                     }
                     Genre genre = getGenre(hrefValue);
-                    genres.add(this.genresRepository.save(genre));
+                    genres.add(this.genreRepository.save(genre));
                 }
             }
         } catch (IOException e) {
@@ -46,7 +46,7 @@ public class GenresService {
     private static Genre getGenre(String hrefValue) {
         var name = hrefValue.substring("/genres/".length());
         Genre genre = new Genre();
-        genre.setName(name);
+        genre.setLabel(name);
         return genre;
     }
 }

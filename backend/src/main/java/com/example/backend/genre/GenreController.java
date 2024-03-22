@@ -1,6 +1,7 @@
-package com.example.backend.genres;
+package com.example.backend.genre;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -8,13 +9,14 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
-@RequestMapping("/genres")
-public class GenresController {
+@RequestMapping("/genre")
+public class GenreController {
     @Autowired
-    GenresService genresService;
+    GenreService genreService;
 
     @GetMapping()
+    @CrossOrigin(origins = "http://localhost:3000")
     public List<Genre> getGenres() {
-        return genresService.findAll();
+        return genreService.findAll();
     }
 }
