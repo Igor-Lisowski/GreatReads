@@ -17,7 +17,7 @@ public class BookListService {
     GenreRepository genreRepository;
 
     public List<BookList> findAllForGenreId(Long genreId) {
-        var lists = this.bookListRepository.findAll();
+        var lists = this.bookListRepository.findAllByGenreId(genreId);
         if (!lists.isEmpty()) {
             return lists;
         }
