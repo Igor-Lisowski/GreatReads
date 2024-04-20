@@ -5,7 +5,7 @@ function NavigationBar() {
     <Box>
       <AppBar position="static">
         <Toolbar>
-          <Typography variant="h6" component="div" sx={{ mr: 5 }}>
+          <Typography variant="h6" component="div" sx={{ mr: 2 }}>
             GreatReads
           </Typography>
           <Box
@@ -15,12 +15,13 @@ function NavigationBar() {
             }}
           >
             <Button
-              sx={{ color: "white", display: "block", mx: 3, paddingBottom: 0 }}
+              href="/fetch"
+              sx={{ color: "white", display: "block", mx: 2, paddingBottom: 0 }}
             >
               Fetch
             </Button>
             <Button
-              sx={{ color: "white", display: "block", mx: 3, paddingBottom: 0 }}
+              sx={{ color: "white", display: "block", mx: 2, paddingBottom: 0 }}
             >
               Browse
             </Button>
