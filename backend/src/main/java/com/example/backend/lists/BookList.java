@@ -26,6 +26,7 @@ public class BookList {
     private String name;
     private Long booksNumber;
     private Long votersNumber;
+    @Enumerated(EnumType.STRING)
     private FetchState fetchState = FetchState.NOT_FETCHED;
     @JsonBackReference
     @ManyToMany(cascade = CascadeType.ALL)
