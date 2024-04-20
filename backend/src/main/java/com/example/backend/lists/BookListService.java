@@ -56,8 +56,14 @@ public class BookListService {
                                 details.indexOf("—") + 2,
                                 details.indexOf("voters") - 1).replace(",", "");
                         bookList.setVotersNumber(Long.parseLong(votersNumber));
-
-                        bookLists.add(bookListRepository.save(bookList));
+                        try {
+                            bookLists.add(bookListRepository.save(bookList));
+                        } catch (Exception exception) {
+                            // TODO:
+                            //  Handle exception making sure that it is related to key duplication or implement isNew check
+                            // TODO:
+                            //  Handle saving same bookList, but with different genre
+                        }
                     }
                 }
             } catch (IOException e) {
