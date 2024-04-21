@@ -1,5 +1,6 @@
 import {
   Box,
+  Button,
   Table,
   TableBody,
   TableCell,
@@ -31,7 +32,7 @@ function BookList({ genreId }: BookListProps) {
                 <TableCell>Name</TableCell>
                 <TableCell>Books Number</TableCell>
                 <TableCell>Voters Number</TableCell>
-                <TableCell>Fetch State</TableCell>
+                <TableCell></TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
@@ -41,11 +42,16 @@ function BookList({ genreId }: BookListProps) {
                   <TableCell>{bookList.booksNumber}</TableCell>
                   <TableCell>{bookList.votersNumber}</TableCell>
                   <TableCell>
-                    {bookList.fetchState === FetchState.NOT_FETCHED
-                      ? "Not Fetched"
-                      : bookList.fetchState === FetchState.FETCHED
-                      ? "Fetched"
-                      : "Fetching"}
+                    <Button
+                      variant="outlined"
+                      disabled={bookList.fetchState !== FetchState.NOT_FETCHED}
+                    >
+                      {bookList.fetchState === FetchState.NOT_FETCHED
+                        ? "Fetch"
+                        : bookList.fetchState === FetchState.FETCHED
+                        ? "Fetched"
+                        : "Fetching"}
+                    </Button>
                   </TableCell>
                 </TableRow>
               ))}
