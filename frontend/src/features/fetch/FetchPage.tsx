@@ -1,7 +1,7 @@
 import { Box } from "@mui/material";
+import BookList from "features/fetch/components/BookList";
+import GenrePicker from "features/fetch/components/GenrePicker";
 import React from "react";
-import BookList from "./components/BookList";
-import GenrePicker from "./components/GenrePicker";
 
 interface FetchPageState {
   genreId: number | undefined;

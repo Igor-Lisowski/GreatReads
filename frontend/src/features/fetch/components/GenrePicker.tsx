@@ -1,6 +1,6 @@
 import { Autocomplete, Box, Button, TextField } from "@mui/material";
-import { useGetGenresQuery } from "../../../shared/api/genreApi";
-import { formatGenres } from "../../../shared/utils/formatGenres";
+import { useGetGenresQuery } from "shared/api/genreApi";
+import { formatGenres } from "shared/utils/formatGenres";
 
 interface GenrePickerProps {
   onGenreChange: (id: number | undefined) => void;

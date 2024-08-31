@@ -8,8 +8,8 @@ import {
   TableHead,
   TableRow,
 } from "@mui/material";
-import { useGetBookListsByGenreIdQuery } from "../../../shared/api/bookListApi";
-import { FetchState } from "../../../shared/types/FetchState";
+import { useGetBookListsByGenreIdQuery } from "shared/api/bookListApi";
+import { FetchState } from "shared/types/FetchState";
 
 interface BookListProps {
   genreId: number;
