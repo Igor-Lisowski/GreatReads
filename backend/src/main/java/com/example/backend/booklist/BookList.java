@@ -1,4 +1,4 @@
-package com.example.backend.lists;
+package com.example.backend.booklist;
 
 import com.example.backend.book.Book;
 import com.example.backend.genre.Genre;
@@ -26,6 +26,7 @@ public class BookList {
     private String name;
     private Long booksNumber;
     private Long votersNumber;
+    private String href;
     @Enumerated(EnumType.STRING)
     private FetchState fetchState = FetchState.NOT_FETCHED;
     @JsonBackReference

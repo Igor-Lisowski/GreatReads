@@ -1,7 +1,7 @@
 package com.example.backend.genre;
 
 
-import com.example.backend.lists.BookList;
+import com.example.backend.booklist.BookList;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -37,5 +37,4 @@ public class Genre {
             inverseJoinColumns = @JoinColumn(name = "bookList_id",
                     referencedColumnName = "id"))
     private List<BookList> bookLists;
-
 }

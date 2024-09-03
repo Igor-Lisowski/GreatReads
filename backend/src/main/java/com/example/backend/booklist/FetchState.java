@@ -1,4 +1,4 @@
-package com.example.backend.lists;
+package com.example.backend.booklist;
 
 public enum FetchState {
     NOT_FETCHED,

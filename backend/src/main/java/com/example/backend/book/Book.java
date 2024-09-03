@@ -1,7 +1,7 @@
 package com.example.backend.book;
 
+import com.example.backend.booklist.BookList;
 import com.example.backend.genre.Genre;
-import com.example.backend.lists.BookList;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -24,8 +24,10 @@ public class Book {
     @Column(unique = true)
     private Long goodReadsId;
     private String name;
-    private Double score;
+    private Double rating;
     private String author;
+    private Integer ratingsNumber;
+    private Integer reviewsNumber;
     @JsonBackReference
     @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinTable(name = "book_genre",
@@ -40,5 +42,4 @@ public class Book {
             inverseJoinColumns = @JoinColumn(name = "bookList_id",
                     referencedColumnName = "id"))
     private List<BookList> bookLists;
-
 }

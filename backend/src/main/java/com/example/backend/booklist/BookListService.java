@@ -1,6 +1,7 @@
-package com.example.backend.lists;
+package com.example.backend.booklist;
 
 import com.example.backend.genre.GenreRepository;
+import jakarta.persistence.EntityNotFoundException;
 import org.jsoup.Jsoup;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -8,6 +9,7 @@ import org.springframework.stereotype.Service;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class BookListService {
@@ -16,15 +18,24 @@ public class BookListService {
     @Autowired
     GenreRepository genreRepository;
 
-    public List<BookList> findAllForGenreId(Long genreId) {
+    public BookList findById(Long id) throws EntityNotFoundException {
+        Optional<BookList> optional = bookListRepository.findById(id);
+        if (optional.isPresent()) {
+            return optional.get();
+        } else {
+            throw new EntityNotFoundException("BookList for given id: " + id + " not present.");
+        }
+    }
+
+    public List<BookList> findAllByGenreId(Long genreId) {
         var lists = this.bookListRepository.findAllByGenreId(genreId);
         if (!lists.isEmpty()) {
             return lists;
         }
-        return scrapeBookListsForGenreId(genreId);
+        return scrapeBookListsByGenreId(genreId);
     }
 
-    private List<BookList> scrapeBookListsForGenreId(Long genreId) {
+    private List<BookList> scrapeBookListsByGenreId(Long genreId) {
         ArrayList<BookList> bookLists = new ArrayList<>();
         var genreToUse = genreRepository.findById(genreId);
         if (genreToUse.isPresent()) {
@@ -43,8 +54,10 @@ public class BookListService {
                         var name = bookListAnchorTag.text();
                         bookList.setName(name);
 
-                        var hrefValue = bookListAnchorTag.attribute("href").getValue();
-                        var goodReadsId = hrefValue.substring("/list/show".length() + 1, hrefValue.indexOf('.'));
+                        var href = bookListAnchorTag.attribute("href").getValue();
+                        bookList.setHref(href);
+
+                        var goodReadsId = href.substring("/list/show".length() + 1, href.indexOf('.'));
                         bookList.setGoodReadsId(Long.parseLong(goodReadsId));
 
                         var details = bookListElement.select(".listFullDetails").text();
@@ -71,5 +84,9 @@ public class BookListService {
             }
         }
         return bookLists;
+    }
+
+    public BookList save(BookList bookList) {
+        return bookListRepository.save(bookList);
     }
 }
