@@ -11,7 +11,7 @@ function App() {
     <Provider store={store}>
       <BrowserRouter>
         <NavigationBar />
-        <Box sx={{ margin: "20px 20vw" }}>
+        <Box sx={{ margin: "20px 10vw" }}>
           <Routes>
             <Route path="/fetch" element={<FetchPage />} />
           </Routes>

@@ -8,6 +8,7 @@ import {
   TableHead,
   TableRow,
 } from "@mui/material";
+import { useScrapeBooksByBookListIdMutation } from "shared/api/bookApi";
 import { useGetBookListsByGenreIdQuery } from "shared/api/bookListApi";
 import { FetchState } from "shared/types/FetchState";
 
@@ -17,6 +18,12 @@ interface BookListProps {
 
 function BookList({ genreId }: BookListProps) {
   const { data, error, isLoading } = useGetBookListsByGenreIdQuery(genreId);
+  const [scrapeBooksByBookListId] = useScrapeBooksByBookListIdMutation();
+
+  const handleFetchClick = (bookListId: number) => {
+    scrapeBooksByBookListId(bookListId);
+  };
+
   return (
     <Box>
       {" "}
@@ -43,6 +50,7 @@ function BookList({ genreId }: BookListProps) {
                   <TableCell>{bookList.votersNumber}</TableCell>
                   <TableCell>
                     <Button
+                      onClick={() => handleFetchClick(bookList.id)}
                       variant="outlined"
                       disabled={bookList.fetchState !== FetchState.NOT_FETCHED}
                     >
