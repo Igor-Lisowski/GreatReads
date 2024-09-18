@@ -21,13 +21,14 @@ public class Book {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-    @Column(unique = true)
-    private Long goodReadsId;
     private String name;
     private Double rating;
     private String author;
     private Integer ratingsNumber;
-    private Integer reviewsNumber;
+    //    private Integer reviewsNumber;
+    @Column(unique = true)
+    private String href;
+    private String imageUrl;
     @JsonBackReference
     @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinTable(name = "book_genre",

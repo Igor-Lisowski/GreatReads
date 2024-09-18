@@ -2,10 +2,12 @@ package com.example.backend.book;
 
 import com.example.backend.booklist.BookListService;
 import org.jsoup.Jsoup;
+import org.jsoup.nodes.Element;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Optional;
 
 @Service
 public class BookService {
@@ -25,17 +27,14 @@ public class BookService {
             var pageNumber = 1;
             ArrayList<Book> books = new ArrayList<>();
             do {
-                var bookElements = bookListPage.select("#all_votes .tableList tbody tr");
-                for (var bookElement : bookElements) {
-                    var anchorTag = bookElement.select("tr .bookTitle").getFirst();
-                    var book = this.scrapeBook(anchorTag.attribute("href").getValue());
-                    if (book != null) {
-                        books.add(book);
-                    }
+                var bookRows = bookListPage.select("#all_votes .tableList tbody tr");
+                for (var bookRow : bookRows) {
+                    var book = this.scrapeBook(bookRow);
+                    books.add(book);
                 }
                 pageNumber++;
                 bookListPage = Jsoup.connect("https://www.goodreads.com" + bookListToUse.getHref() + "?page=" + pageNumber).get();
-            } while (pageNumber < lastPageNumber);
+            } while (pageNumber <= lastPageNumber);
             bookListToUse.setBooks(books);
             bookListService.save(bookListToUse);
         } catch (Exception e) {
@@ -44,35 +43,47 @@ public class BookService {
         return null;
     }
 
-    private Book scrapeBook(String bookLink) {
-        try {
-            var bookPage = Jsoup.connect("https://www.goodreads.com" + bookLink).get();
-            var book = new Book();
+    private Book scrapeBook(Element bookRow) {
+        Book book = new Book();
 
-            var bookTitle = bookPage.select(".Text__title1").getFirst().text();
-            book.setName(bookTitle);
+        Optional<Element> imageTag = Optional.ofNullable(bookRow.select("td:nth-child(2) div a img").getFirst());
+        imageTag.ifPresent(tag -> book.setImageUrl(tag.attribute("src").getValue()));
 
-            var authorName = bookPage.select(".ContributorLink__name").getFirst().text();
-            book.setAuthor(authorName);
+        Optional<Element> bookTitleAnchorTag = Optional.ofNullable(bookRow.select(".bookTitle").getFirst());
+        bookTitleAnchorTag.ifPresent(tag -> {
+            book.setHref(tag.attribute("href").getValue());
+            Optional<Element> bookTitleSpanTag = Optional.ofNullable(tag.select("span").getFirst());
+            bookTitleSpanTag.ifPresent(spanTag -> {
+                String spanTagText = spanTag.text();
+                if (spanTagText.endsWith(")")) {
+                    int lastOpeningBracketIndex = spanTagText.lastIndexOf("(");
+                    String name = spanTagText.substring(0, lastOpeningBracketIndex - 1);
+                    book.setName(name);
+                } else {
+                    book.setName(spanTagText);
+                }
+            });
+        });
 
-            var rating = bookPage.select(".RatingStatistics__rating").getFirst().text();
-            book.setRating(Double.parseDouble(rating));
+        Optional<Element> authorNameSpanTag = Optional.ofNullable(bookRow.select(".authorName span").getFirst());
+        authorNameSpanTag.ifPresent(tag -> book.setAuthor(tag.text()));
 
-            var ratingsStatistics = bookPage.select(".RatingStatistics__meta").getFirst().attr("aria-label");
-            var ratingsText = ratingsStatistics.substring(0, ratingsStatistics.indexOf("ratings") - 1);
-            var ratingsNumber = Integer.parseInt(ratingsText.replace(",", ""));
-            book.setRatingsNumber(ratingsNumber);
+        Optional<Element> ratingTag = Optional.ofNullable(bookRow.select(".minirating").getFirst());
+        if (ratingTag.isPresent()) {
+            var ratingText = ratingTag.get().ownText();
+            var avgRatingIdx = ratingText.indexOf(" avg rating");
+            if (avgRatingIdx > 0) {
+                var rating = ratingText.substring(0, ratingText.indexOf(" avg rating"));
+                book.setRating(Double.parseDouble(rating));
+            }
 
-            var reviewsText = ratingsStatistics.substring(ratingsStatistics.indexOf("and") + "and".length() + 1,
-                    ratingsStatistics.indexOf("reviews") - 1);
-            var reviewsNumber = Integer.parseInt(reviewsText.replace(",", ""));
-            book.setReviewsNumber(reviewsNumber);
-
-            return book;
-
-        } catch (Exception e) {
-
+            var dashIndex = ratingText.indexOf("—");
+            var ratingIndex = ratingText.lastIndexOf(" rating");
+            if (dashIndex > 0 && ratingIndex > 0 && dashIndex < ratingIndex) {
+                var ratings = ratingText.substring(dashIndex + 2, ratingIndex).replace(",", "");
+                book.setRatingsNumber(Integer.parseInt(ratings));
+            }
         }
-        return null;
+        return book;
     }
 }
