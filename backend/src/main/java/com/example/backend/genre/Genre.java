@@ -24,14 +24,14 @@ public class Genre {
     @Column(unique = true)
     private String label;
     @JsonBackReference
-    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH})
     @JoinTable(name = "book_genre",
             joinColumns = @JoinColumn(name = "genre_id", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "book_id",
                     referencedColumnName = "id"))
     private List<Genre> books;
     @JsonBackReference
-    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH})
     @JoinTable(name = "bookList_genre",
             joinColumns = @JoinColumn(name = "genre_id", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "bookList_id",

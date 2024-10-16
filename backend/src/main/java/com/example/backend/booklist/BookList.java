@@ -30,14 +30,14 @@ public class BookList {
     @Enumerated(EnumType.STRING)
     private FetchState fetchState = FetchState.NOT_FETCHED;
     @JsonBackReference
-    @ManyToMany(cascade = CascadeType.ALL)
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH})
     @JoinTable(name = "bookList_genre",
             joinColumns = @JoinColumn(name = "bookList_id", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "genre_id",
                     referencedColumnName = "id"))
     private List<Genre> genres;
     @JsonBackReference
-    @ManyToMany(cascade = CascadeType.ALL)
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH})
     @JoinTable(name = "book_bookList",
             joinColumns = @JoinColumn(name = "bookList_id", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "book_id",
