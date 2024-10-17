@@ -1,6 +1,8 @@
 package com.example.backend.book;
 
+import com.example.backend.booklist.BookList;
 import com.example.backend.booklist.BookListService;
+import com.example.backend.job.Job;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Element;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,20 +21,22 @@ public class BookService {
 
     public Runnable scrapeBooksByBookListId(Long bookListId) {
         try {
-            // TODO: ADD NULL CHECKS
-            var bookListToUse = bookListService.findById(bookListId);
-            var bookListPage = Jsoup.connect("https://www.goodreads.com" + bookListToUse.getHref()).get();
-            var lastPage = bookListPage.select(".pagination a:nth-last-child(2)");
-            var lastPageNumber = Integer.parseInt(lastPage.text());
+            Job job = new Job(new BookList(bookListId));
+            var bookListToUse = bookListService.findById(bookListId);  // TODO: add error handling
+            var bookListPage = Jsoup.connect("https://www.goodreads.com" + bookListToUse.getHref()).get(); // TODO: add error handling
+            var lastPage = bookListPage.select(".pagination a:nth-last-child(2)"); // TODO: add error handling
+            var lastPageNumber = Integer.parseInt(lastPage.text()); // TODO: add error handling
             var pageNumber = 1;
             ArrayList<Book> books = new ArrayList<>();
             do {
-                var bookRows = bookListPage.select("#all_votes .tableList tbody tr");
+                var bookRows = bookListPage.select("#all_votes .tableList tbody tr"); // TODO: add error handling
                 for (var bookRow : bookRows) {
                     var book = this.scrapeBook(bookRow);
                     books.add(book);
                 }
                 pageNumber++;
+                job.updatePercentage(pageNumber, lastPageNumber);
+                // TODO: add error handling
                 bookListPage = Jsoup.connect("https://www.goodreads.com" + bookListToUse.getHref() + "?page=" + pageNumber).get();
             } while (pageNumber <= lastPageNumber);
             bookListToUse.setBooks(books);

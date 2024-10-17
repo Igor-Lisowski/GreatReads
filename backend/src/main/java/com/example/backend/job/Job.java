@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.ColumnDefault;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -20,4 +21,17 @@ public class Job {
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "book_list_id", referencedColumnName = "id")
     private BookList bookList;
+    @Enumerated(EnumType.STRING)
+    @ColumnDefault("PENDING")
+    private JobStatus status;
+
+    private int percentage;
+
+    public Job(BookList bookList) {
+        this.bookList = bookList;
+    }
+
+    public void updatePercentage(int page, int totalPages) {
+        this.percentage = (page * 100) / totalPages;
+    }
 }
