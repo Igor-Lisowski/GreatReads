@@ -19,14 +19,23 @@ public class BookService {
     @Autowired
     BookListService bookListService;
 
+    @Autowired
+    JobEntityService jobEntityService;
+
     public Runnable scrapeBooksByBookListId(Long bookListId) {
         try {
-            Job job = new Job(new BookList(bookListId));
             var bookListToUse = bookListService.findById(bookListId);  // TODO: add error handling
+
+            Job job = new Job();
+            job.setBookList(bookListToUse);
+            jobEntityService.save(job);
+
+
             var bookListPage = Jsoup.connect("https://www.goodreads.com" + bookListToUse.getHref()).get(); // TODO: add error handling
             var lastPage = bookListPage.select(".pagination a:nth-last-child(2)"); // TODO: add error handling
             var lastPageNumber = Integer.parseInt(lastPage.text()); // TODO: add error handling
             var pageNumber = 1;
+
             ArrayList<Book> books = new ArrayList<>();
             do {
                 var bookRows = bookListPage.select("#all_votes .tableList tbody tr"); // TODO: add error handling
@@ -36,9 +45,11 @@ public class BookService {
                 }
                 pageNumber++;
                 job.updatePercentage(pageNumber, lastPageNumber);
+                jobEntityService.save(job);
                 // TODO: add error handling
                 bookListPage = Jsoup.connect("https://www.goodreads.com" + bookListToUse.getHref() + "?page=" + pageNumber).get();
             } while (pageNumber <= lastPageNumber);
+
             bookListToUse.setBooks(books);
             bookListService.save(bookListToUse);
         } catch (Exception e) {

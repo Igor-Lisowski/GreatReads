@@ -13,9 +13,6 @@ import java.util.concurrent.Executor;
 @Service
 public class JobService {
     @Autowired
-    JobRepository jobRepository;
-
-    @Autowired
     BookService bookService;
 
     @Bean
@@ -33,6 +30,4 @@ public class JobService {
     public void scrapeBooksByBookListId(Long bookListId) {
         CompletableFuture.runAsync(bookService.scrapeBooksByBookListId(bookListId));
     }
-
-
 }

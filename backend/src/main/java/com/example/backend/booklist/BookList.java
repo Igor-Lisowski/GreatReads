@@ -43,4 +43,8 @@ public class BookList {
             inverseJoinColumns = @JoinColumn(name = "book_id",
                     referencedColumnName = "id"))
     private List<Book> books;
+
+    public BookList(Long id) {
+        this.id = id;
+    }
 }
