@@ -9,10 +9,12 @@ import java.util.List;
 @Repository
 public interface BookListRepository extends JpaRepository<BookList, Long> {
     @Query(value = """
-            select bl.id, bl.books_number, bl.fetch_state, bl.good_reads_id, bl.name, bl.voters_number, bl.href\s
-            from book_list bl\s
-            inner join book_list_genre blg on bl.id = blg.book_list_id\s
-            inner join genre on blg.genre_id = genre.id
-            where genre.id = ?1""", nativeQuery = true)
+            SELECT bl.id, bl.books_number, bl.fetch_state, bl.good_reads_id, bl.name, bl.voters_number, bl.href,\s
+            j.status\s
+            FROM book_list bl\s
+            INNER JOIN book_list_genre blg on bl.id = blg.book_list_id\s
+            INNER JOIN genre g on blg.genre_id = g.id\s
+            LEFT JOIN job j on bl.id = j.book_list_id\s
+            WHERE g.id = ?1""", nativeQuery = true)
     List<BookList> findAllByGenreId(Long genreId);
 }

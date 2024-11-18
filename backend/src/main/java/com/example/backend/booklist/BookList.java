@@ -2,6 +2,7 @@ package com.example.backend.booklist;
 
 import com.example.backend.book.Book;
 import com.example.backend.genre.Genre;
+import com.example.backend.job.Job;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -44,7 +45,6 @@ public class BookList {
                     referencedColumnName = "id"))
     private List<Book> books;
 
-    public BookList(Long id) {
-        this.id = id;
-    }
+    @OneToOne(mappedBy = "bookList", fetch = FetchType.LAZY)
+    private Job job;
 }
