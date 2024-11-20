@@ -3,12 +3,12 @@ import BookList from "features/fetch/components/BookList";
 import GenrePicker from "features/fetch/components/GenrePicker";
 import React from "react";
 
-interface FetchPageState {
+interface BookListPageState {
   genreId: number | undefined;
 }
 
-function FetchPage() {
-  const [state, setState] = React.useState<FetchPageState>({
+function BookListPage() {
+  const [state, setState] = React.useState<BookListPageState>({
     genreId: undefined,
   });
   const handleGenreChange = (genreId: number | undefined) => {
@@ -23,4 +23,4 @@ function FetchPage() {
   );
 }
 
-export default FetchPage;
+export default BookListPage;

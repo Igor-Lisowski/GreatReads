@@ -15,15 +15,20 @@ function NavigationBar() {
             }}
           >
             <Button
-              href="/fetch"
+              href="/booklists"
               sx={{ color: "white", display: "block", mx: 2, paddingBottom: 0 }}
             >
-              Fetch
+              BookLists
             </Button>
             <Button
               sx={{ color: "white", display: "block", mx: 2, paddingBottom: 0 }}
             >
-              Browse
+              Books
+            </Button>
+            <Button
+              sx={{ color: "white", display: "block", mx: 2, paddingBottom: 0 }}
+            >
+              Jobs
             </Button>
           </Box>
         </Toolbar>
