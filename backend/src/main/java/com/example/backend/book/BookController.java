@@ -1,6 +1,6 @@
 package com.example.backend.book;
 
-import com.example.backend.job.JobService;
+import com.example.backend.task.TaskService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,12 +12,12 @@ public class BookController {
     @Autowired
     BookService bookService;
     @Autowired
-    JobService jobService;
+    TaskService taskService;
 
     @PostMapping("/scrape")
     @CrossOrigin(origins = "http://localhost:3000")
     public ResponseEntity<?> scrapeBooksByBookListId(@RequestParam Long bookListId) {
-        jobService.scrapeBooksByBookListId(bookListId);
+        taskService.scrapeBooksByBookListId(bookListId);
         return new ResponseEntity<>(null, HttpStatus.OK);
     }
 }
