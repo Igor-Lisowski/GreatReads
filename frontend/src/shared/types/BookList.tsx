@@ -1,4 +1,4 @@
-import { FetchState } from "./FetchState";
+import { Job } from "shared/types/Job";
 
 export interface BookList {
   id: number;
@@ -6,5 +6,5 @@ export interface BookList {
   name: string;
   booksNumber: number;
   votersNumber: number;
-  fetchState: FetchState;
+  job: Job;
 }

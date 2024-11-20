@@ -28,8 +28,6 @@ public class BookList {
     private Long booksNumber;
     private Long votersNumber;
     private String href;
-    @Enumerated(EnumType.STRING)
-    private FetchState fetchState = FetchState.NOT_FETCHED;
     @JsonBackReference
     @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH})
     @JoinTable(name = "bookList_genre",

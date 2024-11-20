@@ -10,7 +10,7 @@ import {
 } from "@mui/material";
 import { useScrapeBooksByBookListIdMutation } from "shared/api/bookApi";
 import { useGetBookListsByGenreIdQuery } from "shared/api/bookListApi";
-import { FetchState } from "shared/types/FetchState";
+import { JobStatus } from "shared/types/JobStatus";
 
 interface BookListProps {
   genreId: number;
@@ -44,7 +44,7 @@ function BookList({ genreId }: BookListProps) {
             </TableHead>
             <TableBody>
               {data.map((bookList) => (
-                <TableRow>
+                <TableRow key={bookList.id}>
                   <TableCell>{bookList.name}</TableCell>
                   <TableCell>{bookList.booksNumber}</TableCell>
                   <TableCell>{bookList.votersNumber}</TableCell>
@@ -52,11 +52,12 @@ function BookList({ genreId }: BookListProps) {
                     <Button
                       onClick={() => handleFetchClick(bookList.id)}
                       variant="outlined"
-                      disabled={bookList.fetchState !== FetchState.NOT_FETCHED}
+                      disabled={bookList.job?.status === JobStatus.COMPLETED}
                     >
-                      {bookList.fetchState === FetchState.NOT_FETCHED
+                      {bookList.job === null ||
+                      bookList.job?.status === JobStatus.FAILED
                         ? "Fetch"
-                        : bookList.fetchState === FetchState.FETCHED
+                        : bookList.job?.status === JobStatus.COMPLETED
                         ? "Fetched"
                         : "Fetching"}
                     </Button>
