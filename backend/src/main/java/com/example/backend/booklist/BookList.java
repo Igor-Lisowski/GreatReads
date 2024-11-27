@@ -29,7 +29,7 @@ public class BookList {
     private Long votersNumber;
     private String href;
     @JsonBackReference
-    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH})
+    @ManyToMany(cascade = {CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH})
     @JoinTable(name = "bookList_genre",
             joinColumns = @JoinColumn(name = "bookList_id", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "genre_id",

@@ -17,4 +17,7 @@ public interface BookListRepository extends JpaRepository<BookList, Long> {
             LEFT JOIN job j on bl.id = j.book_list_id\s
             WHERE g.id = ?1""", nativeQuery = true)
     List<BookList> findAllByGenreId(Long genreId);
+
+    @Query(value = "SELECT * FROM book_list WHERE good_reads_id IN ?1", nativeQuery = true)
+    List<BookList> findAllByGoodReadsIds(List<Long> goodReadsIds);
 }

@@ -8,8 +8,13 @@ import java.util.List;
 @RestController
 @RequestMapping("/book-list")
 public class BookListController {
+
+    private final BookListService bookListService;
+
     @Autowired
-    BookListService bookListService;
+    public BookListController(BookListService bookListService) {
+        this.bookListService = bookListService;
+    }
 
     @GetMapping()
     @CrossOrigin(origins = "http://localhost:3000")
