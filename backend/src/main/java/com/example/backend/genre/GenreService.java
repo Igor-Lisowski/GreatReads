@@ -16,11 +16,14 @@ import java.util.stream.Stream;
 
 @Service
 public class GenreService {
-    public final GenreRepository genreRepository;
-    public final BookListService bookListService;
+    private final GenreRepository genreRepository;
+    private final BookListService bookListService;
 
     @Autowired
-    public GenreService(GenreRepository genreRepository, @Lazy BookListService bookListService) {
+    public GenreService(
+            GenreRepository genreRepository,
+            @Lazy BookListService bookListService
+    ) {
         this.genreRepository = genreRepository;
         this.bookListService = bookListService;
     }
@@ -30,15 +33,15 @@ public class GenreService {
         return optional.orElse(null);
     }
 
-    public List<Genre> findAll() {
+    public List<GenreDto> findAll() {
         var genres = this.genreRepository.findAll();
         if (!genres.isEmpty()) {
-            return genres;
+            return GenreMapper.INSTANCE.map(genres);
         }
         return scrapeGenres();
     }
 
-    private List<Genre> scrapeGenres() {
+    private List<GenreDto> scrapeGenres() {
         ArrayList<Genre> genres = new ArrayList<>();
         try {
             var doc = Jsoup.connect("https://www.goodreads.com").get();
@@ -57,7 +60,7 @@ public class GenreService {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        return genres;
+        return GenreMapper.INSTANCE.map(genres);
     }
 
     private static Genre getGenre(String hrefValue) {

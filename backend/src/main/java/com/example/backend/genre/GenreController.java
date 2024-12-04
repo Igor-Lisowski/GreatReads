@@ -11,12 +11,16 @@ import java.util.List;
 @RestController
 @RequestMapping("/genre")
 public class GenreController {
+    private final GenreService genreService;
+
     @Autowired
-    GenreService genreService;
+    public GenreController(GenreService genreService) {
+        this.genreService = genreService;
+    }
 
     @GetMapping()
     @CrossOrigin(origins = "http://localhost:3000")
-    public List<Genre> getGenres() {
+    public List<GenreDto> getGenres() {
         return genreService.findAll();
     }
 }
