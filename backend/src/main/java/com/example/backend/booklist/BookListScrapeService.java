@@ -20,7 +20,7 @@ public class BookListScrapeService {
         this.genreService = genreService;
     }
 
-    public List<BookList> scrapeBookListsByGenreId(Long genreId) {
+    public List<BookListDto> scrapeBookListsByGenreId(Long genreId) {
         ArrayList<BookList> bookLists = new ArrayList<>();
         var genre = genreService.findById(genreId);
         if (genre != null) {
@@ -59,6 +59,6 @@ public class BookListScrapeService {
                 throw new RuntimeException(e);
             }
         }
-        return bookLists;
+        return BookListMapper.INSTANCE.map(bookLists);
     }
 }

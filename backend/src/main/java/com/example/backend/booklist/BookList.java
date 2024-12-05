@@ -3,7 +3,6 @@ package com.example.backend.booklist;
 import com.example.backend.book.Book;
 import com.example.backend.genre.Genre;
 import com.example.backend.job.Job;
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -28,21 +27,21 @@ public class BookList {
     private Long booksNumber;
     private Long votersNumber;
     private String href;
-    @JsonBackReference
     @ManyToMany(cascade = {CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH})
-    @JoinTable(name = "bookList_genre",
-            joinColumns = @JoinColumn(name = "bookList_id", referencedColumnName = "id"),
-            inverseJoinColumns = @JoinColumn(name = "genre_id",
-                    referencedColumnName = "id"))
+    @JoinTable(
+            name = "bookList_genre",
+            joinColumns = @JoinColumn(name = "bookList_id"),
+            inverseJoinColumns = @JoinColumn(name = "genre_id")
+    )
     private List<Genre> genres;
-    @JsonBackReference
-    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH})
-    @JoinTable(name = "book_bookList",
-            joinColumns = @JoinColumn(name = "bookList_id", referencedColumnName = "id"),
-            inverseJoinColumns = @JoinColumn(name = "book_id",
-                    referencedColumnName = "id"))
+    @ManyToMany(cascade = {CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH})
+    @JoinTable(
+            name = "book_bookList",
+            joinColumns = @JoinColumn(name = "bookList_id"),
+            inverseJoinColumns = @JoinColumn(name = "book_id")
+    )
     private List<Book> books;
-
-    @OneToOne(mappedBy = "bookList", fetch = FetchType.LAZY)
+    @OneToOne(mappedBy = "bookList", cascade = {CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH},
+            fetch = FetchType.LAZY)
     private Job job;
 }

@@ -18,7 +18,7 @@ public class BookListController {
 
     @GetMapping()
     @CrossOrigin(origins = "http://localhost:3000")
-    public List<BookList> getBookListsForGenreId(@RequestParam Long genreId) {
+    public List<BookListDto> getBookListsForGenreId(@RequestParam Long genreId) {
         return bookListService.findAllByGenreId(genreId);
     }
 }
