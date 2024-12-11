@@ -17,8 +17,8 @@ public class Job {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-    @OneToOne(cascade = {CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH})
-    @JoinColumn(name = "book_list_id", referencedColumnName = "id")
+    @OneToOne(cascade = {CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH}, fetch = FetchType.LAZY)
+    @JoinColumn(name = "book_list_id")
     private BookList bookList;
     @Enumerated(EnumType.STRING)
     private JobStatus status;
@@ -27,5 +27,8 @@ public class Job {
 
     public void updatePercentage(int page, int totalPages) {
         this.percentage = (page * 100) / totalPages;
+        if (this.percentage == 100) {
+            this.status = JobStatus.COMPLETED;
+        }
     }
 }

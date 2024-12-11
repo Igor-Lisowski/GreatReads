@@ -28,6 +28,6 @@ public class TaskService {
 
     @Async
     public void scrapeBooksByBookListId(Long bookListId) {
-        CompletableFuture.runAsync(bookService.scrapeBooksByBookListId(bookListId));
+        CompletableFuture.runAsync(() -> bookService.scrapeBooksByBookListId(bookListId));
     }
 }
