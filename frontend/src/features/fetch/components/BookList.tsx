@@ -1,6 +1,5 @@
 import {
   Box,
-  Button,
   Table,
   TableBody,
   TableCell,
@@ -8,9 +7,8 @@ import {
   TableHead,
   TableRow,
 } from "@mui/material";
-import { useScrapeBooksByBookListIdMutation } from "shared/api/bookApi";
+import BookListEntry from "features/fetch/components/BookListEntry";
 import { useGetBookListsByGenreIdQuery } from "shared/api/bookListApi";
-import { JobStatus } from "shared/types/JobStatus";
 
 interface BookListProps {
   genreId: number;
@@ -18,11 +16,6 @@ interface BookListProps {
 
 function BookList({ genreId }: BookListProps) {
   const { data, error, isLoading } = useGetBookListsByGenreIdQuery(genreId);
-  const [scrapeBooksByBookListId] = useScrapeBooksByBookListIdMutation();
-
-  const handleFetchClick = (bookListId: number) => {
-    scrapeBooksByBookListId(bookListId);
-  };
 
   return (
     <Box>
@@ -44,25 +37,10 @@ function BookList({ genreId }: BookListProps) {
             </TableHead>
             <TableBody>
               {data.map((bookList) => (
-                <TableRow key={bookList.id}>
-                  <TableCell>{bookList.name}</TableCell>
-                  <TableCell>{bookList.booksNumber}</TableCell>
-                  <TableCell>{bookList.votersNumber}</TableCell>
-                  <TableCell>
-                    <Button
-                      onClick={() => handleFetchClick(bookList.id)}
-                      variant="outlined"
-                      disabled={bookList.job?.status === JobStatus.COMPLETED}
-                    >
-                      {bookList.job === null ||
-                      bookList.job?.status === JobStatus.FAILED
-                        ? "Fetch"
-                        : bookList.job?.status === JobStatus.COMPLETED
-                        ? "Fetched"
-                        : "Fetching"}
-                    </Button>
-                  </TableCell>
-                </TableRow>
+                <BookListEntry
+                  key={bookList.id}
+                  bookList={bookList}
+                ></BookListEntry>
               ))}
             </TableBody>
           </Table>
