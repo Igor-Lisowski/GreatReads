@@ -8,6 +8,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/book")
 public class BookController {
@@ -31,5 +33,11 @@ public class BookController {
         Job job = jobService.createJobForBookListId(bookListId);
         taskService.scrapeBooksByBookListId(bookListId);
         return new ResponseEntity<>(job, HttpStatus.OK);
+    }
+
+    @GetMapping()
+    @CrossOrigin(origins = "http://localhost:3000")
+    public ResponseEntity<List<BookDto>> getBooksByGenreId(@RequestParam Long genreId) {
+        return new ResponseEntity<>(bookService.findBooksByGenreId(genreId), HttpStatus.OK);
     }
 }

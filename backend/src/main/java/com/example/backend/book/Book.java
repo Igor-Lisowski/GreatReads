@@ -1,7 +1,6 @@
 package com.example.backend.book;
 
 import com.example.backend.booklist.BookList;
-import com.example.backend.genre.Genre;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -24,15 +23,9 @@ public class Book {
     private Double rating;
     private String author;
     private Integer ratingsNumber;
-    //    private Integer reviewsNumber;
     @Column(unique = true)
     private String href;
     private String imageUrl;
-    @ManyToMany(cascade = {CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH})
-    @JoinTable(name = "book_genre",
-            joinColumns = @JoinColumn(name = "book_id"),
-            inverseJoinColumns = @JoinColumn(name = "genre_id"))
-    private List<Genre> genres;
     @ManyToMany(cascade = {CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH})
     @JoinTable(name = "book_bookList",
             joinColumns = @JoinColumn(name = "book_id"),

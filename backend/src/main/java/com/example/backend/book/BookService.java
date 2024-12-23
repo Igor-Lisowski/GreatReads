@@ -113,4 +113,8 @@ public class BookService {
     public List<Book> saveAll(List<Book> books) {
         return bookRepository.saveAll(books);
     }
+
+    public List<BookDto> findBooksByGenreId(Long genreId) {
+        return BookMapper.INSTANCE.map(bookRepository.findBooksByGenreId(genreId));
+    }
 }

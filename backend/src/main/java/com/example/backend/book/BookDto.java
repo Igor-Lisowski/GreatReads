@@ -11,10 +11,10 @@ import lombok.Setter;
 @Setter
 public class BookDto {
     private Long id;
-    private String title;
+    private String name;
+    private Double rating;
     private String author;
-    private String publisher;
-    private String description;
-    private String image;
+    private Integer ratingsNumber;
     private String href;
+    private String imageUrl;
 }

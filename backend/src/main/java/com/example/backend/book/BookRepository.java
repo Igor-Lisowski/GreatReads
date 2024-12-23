@@ -11,4 +11,7 @@ import java.util.List;
 public interface BookRepository extends JpaRepository<Book, Long> {
     @Query("SELECT b FROM Book b WHERE b.href IN :hrefs")
     List<Book> findAllByHrefIn(@Param("hrefs") List<String> hrefs);
+
+    @Query("SELECT b FROM Book b JOIN b.bookLists bl JOIN bl.genres g WHERE g.id = :genreId")
+    List<Book> findBooksByGenreId(@Param("genreId") Long genreId);
 }
