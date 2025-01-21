@@ -1,7 +1,8 @@
 import { Box } from "@mui/material";
+import BooksPage from "features/browse/BooksPage";
+import BookListsPage from "features/fetch/BookListsPage";
 import { Provider } from "react-redux";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-import BookListPage from "../features/fetch/FetchPage";
 import "./App.css";
 import NavigationBar from "./components/NavigationBar";
 import store from "./store";
@@ -13,7 +14,10 @@ function App() {
         <NavigationBar />
         <Box sx={{ margin: "20px 10vw" }}>
           <Routes>
-            <Route path="/booklists" element={<BookListPage />} />
+            <Route path="/booklists" element={<BookListsPage />} />
+          </Routes>
+          <Routes>
+            <Route path="/books" element={<BooksPage />} />
           </Routes>
         </Box>
       </BrowserRouter>

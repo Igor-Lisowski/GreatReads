@@ -1,53 +1,51 @@
-import {
-  Box,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
-} from "@mui/material";
-import BookListEntry from "features/fetch/components/BookListEntry";
-import { useGetBookListsByGenreIdQuery } from "shared/api/bookListApi";
+import { Button, TableCell, TableRow } from "@mui/material";
+import React, { useState } from "react";
+import { useScrapeBooksByBookListIdMutation } from "shared/api/bookApi";
+import { JobStatus } from "shared/types/JobStatus";
 
 interface BookListProps {
-  genreId: number;
+  bookList: {
+    id: number;
+    name: string;
+    booksNumber: number;
+    votersNumber: number;
+    job: {
+      status: string;
+    };
+  };
 }
 
-function BookList({ genreId }: BookListProps) {
-  const { data, error, isLoading } = useGetBookListsByGenreIdQuery(genreId);
+const BookList: React.FC<BookListProps> = ({ bookList }) => {
+  const [jobStatus, setJobStatus] = useState(bookList?.job?.status);
+  const [scrapeBooksByBookListId] = useScrapeBooksByBookListIdMutation();
+
+  const handleFetchClick = (bookListId: number) => {
+    scrapeBooksByBookListId(bookListId);
+    setJobStatus(JobStatus.PENDING);
+  };
 
   return (
-    <Box>
-      {" "}
-      {error ? (
-        <>Oh no, there was an error</>
-      ) : isLoading ? (
-        <>Loading...</>
-      ) : data ? (
-        <TableContainer style={{ maxHeight: "75vh" }}>
-          <Table stickyHeader>
-            <TableHead>
-              <TableRow>
-                <TableCell>Name</TableCell>
-                <TableCell>Books Number</TableCell>
-                <TableCell>Voters Number</TableCell>
-                <TableCell></TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {data.map((bookList) => (
-                <BookListEntry
-                  key={bookList.id}
-                  bookList={bookList}
-                ></BookListEntry>
-              ))}
-            </TableBody>
-          </Table>
-        </TableContainer>
-      ) : null}
-    </Box>
+    <TableRow key={bookList.id}>
+      <TableCell>{bookList.name}</TableCell>
+      <TableCell>{bookList.booksNumber}</TableCell>
+      <TableCell>{bookList.votersNumber}</TableCell>
+      <TableCell>
+        <Button
+          onClick={() => handleFetchClick(bookList.id)}
+          variant="outlined"
+          disabled={
+            jobStatus === JobStatus.PENDING || jobStatus === JobStatus.COMPLETED
+          }
+        >
+          {!jobStatus || jobStatus === JobStatus.FAILED
+            ? "Fetch"
+            : jobStatus === JobStatus.COMPLETED
+            ? "Fetched"
+            : "Fetching"}
+        </Button>
+      </TableCell>
+    </TableRow>
   );
-}
+};
 
 export default BookList;

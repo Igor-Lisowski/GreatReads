@@ -15,9 +15,7 @@ import java.util.List;
 public class BookController {
 
     private final BookService bookService;
-
     private final TaskService taskService;
-
     private final JobService jobService;
 
     @Autowired

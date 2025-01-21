@@ -21,6 +21,7 @@ function NavigationBar() {
               BookLists
             </Button>
             <Button
+              href="/books"
               sx={{ color: "white", display: "block", mx: 2, paddingBottom: 0 }}
             >
               Books

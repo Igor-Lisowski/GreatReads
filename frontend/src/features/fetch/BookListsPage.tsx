@@ -1,13 +1,13 @@
 import { Box } from "@mui/material";
-import BookList from "features/fetch/components/BookList";
-import GenrePicker from "features/fetch/components/GenrePicker";
+import BookLists from "features/fetch/components/BookLists";
 import React from "react";
+import GenrePicker from "shared/components/GenrePicker";
 
 interface BookListPageState {
   genreId: number | undefined;
 }
 
-function BookListPage() {
+function BookListsPage() {
   const [state, setState] = React.useState<BookListPageState>({
     genreId: undefined,
   });
@@ -18,9 +18,9 @@ function BookListPage() {
   return (
     <Box>
       <GenrePicker onGenreChange={handleGenreChange} />
-      {state.genreId ? <BookList genreId={state.genreId}></BookList> : null}
+      {state.genreId ? <BookLists genreId={state.genreId}></BookLists> : null}
     </Box>
   );
 }
 
-export default BookListPage;
+export default BookListsPage;
