@@ -17,8 +17,15 @@ export const bookApi = createApi({
         method: "POST",
       }),
     }),
-    getBooksByGenreId: builder.query<Book[], number>({
-      query: (genreId) => `book?genreId=${genreId}`,
+    getBooksByGenreId: builder.query<
+      Book[],
+      { genreId: number; pageNumber: number }
+    >({
+      query: (args: { genreId: number; pageNumber: number }) =>
+        `book?genreId=${args.genreId}&pageNumber=${args.pageNumber}`,
+    }),
+    countBooksByGenreId: builder.query<Book[], number>({
+      query: (genreId) => `book/count?genreId=${genreId}`,
     }),
   }),
 });
@@ -27,3 +34,4 @@ export const bookApi = createApi({
 // auto-generated based on the defined endpoints
 export const { useScrapeBooksByBookListIdMutation } = bookApi;
 export const { useGetBooksByGenreIdQuery } = bookApi;
+export const { useCountBooksByGenreIdQuery } = bookApi;

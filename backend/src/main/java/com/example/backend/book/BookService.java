@@ -7,6 +7,7 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Element;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -114,7 +115,11 @@ public class BookService {
         return bookRepository.saveAll(books);
     }
 
-    public List<BookDto> findBooksByGenreId(Long genreId) {
-        return BookMapper.INSTANCE.map(bookRepository.findBooksByGenreId(genreId));
+    public List<BookDto> findBooksByGenreId(Long genreId, Integer pageNumber) {
+        return BookMapper.INSTANCE.map(bookRepository.findBooksByGenreId(genreId, PageRequest.of(pageNumber - 1, 100)));
+    }
+
+    public Integer countBooksByGenreId(Long genreId) {
+        return bookRepository.countBooksByGenreId(genreId);
     }
 }

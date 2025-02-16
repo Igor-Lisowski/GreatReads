@@ -1,5 +1,6 @@
 package com.example.backend.book;
 
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -13,5 +14,8 @@ public interface BookRepository extends JpaRepository<Book, Long> {
     List<Book> findAllByHrefIn(@Param("hrefs") List<String> hrefs);
 
     @Query("SELECT b FROM Book b JOIN b.bookLists bl JOIN bl.genres g WHERE g.id = :genreId")
-    List<Book> findBooksByGenreId(@Param("genreId") Long genreId);
+    List<Book> findBooksByGenreId(@Param("genreId") Long genreId, Pageable pageable);
+
+    @Query("SELECT COUNT(b) FROM Book b JOIN b.bookLists bl JOIN bl.genres g WHERE g.id = :genreId")
+    Integer countBooksByGenreId(Long genreId);
 }

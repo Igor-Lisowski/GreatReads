@@ -8,6 +8,8 @@ import {
   TableRow,
 } from "@mui/material";
 import Book from "features/browse/components/Book";
+import BooksPagination from "features/browse/components/BooksPagination";
+import { useEffect, useState } from "react";
 import { useGetBooksByGenreIdQuery } from "shared/api/bookApi";
 
 interface BooksProps {
@@ -15,7 +17,20 @@ interface BooksProps {
 }
 
 function Books({ genreId }: BooksProps) {
-  const { data, error, isLoading } = useGetBooksByGenreIdQuery(genreId);
+  const updatePageNumber = (pageNumber: number) => {
+    setPageNumber(pageNumber);
+  };
+
+  const [pageNumber, setPageNumber] = useState<number>(1);
+
+  const { data, error, isLoading, refetch } = useGetBooksByGenreIdQuery({
+    genreId: genreId,
+    pageNumber: pageNumber,
+  });
+
+  useEffect(() => {
+    refetch();
+  }, [pageNumber, refetch]);
 
   return (
     <Box>
@@ -25,23 +40,29 @@ function Books({ genreId }: BooksProps) {
       ) : isLoading ? (
         <>Loading...</>
       ) : data ? (
-        <TableContainer style={{ maxHeight: "75vh" }}>
-          <Table stickyHeader>
-            <TableHead>
-              <TableRow>
-                <TableCell>Name</TableCell>
-                <TableCell>Rating</TableCell>
-                <TableCell>Author</TableCell>
-                <TableCell>Ratings Number</TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {data.map((book) => (
-                <Book key={book.id} book={book}></Book>
-              ))}
-            </TableBody>
-          </Table>
-        </TableContainer>
+        <Box>
+          <TableContainer style={{ maxHeight: "75vh" }}>
+            <Table stickyHeader>
+              <TableHead>
+                <TableRow>
+                  <TableCell>Name</TableCell>
+                  <TableCell>Rating</TableCell>
+                  <TableCell>Author</TableCell>
+                  <TableCell>Ratings Number</TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {data.map((book) => (
+                  <Book key={book.id} book={book}></Book>
+                ))}
+              </TableBody>
+            </Table>
+          </TableContainer>
+          <BooksPagination
+            genreId={genreId}
+            updatePageNumber={updatePageNumber}
+          />
+        </Box>
       ) : null}
     </Box>
   );

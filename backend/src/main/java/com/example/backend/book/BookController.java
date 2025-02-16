@@ -27,7 +27,7 @@ public class BookController {
 
     @PostMapping("/scrape")
     @CrossOrigin(origins = "http://localhost:3000")
-    public ResponseEntity<?> scrapeBooksByBookListId(@RequestParam Long bookListId) {
+    public ResponseEntity<Job> scrapeBooksByBookListId(@RequestParam Long bookListId) {
         Job job = jobService.createJobForBookListId(bookListId);
         taskService.scrapeBooksByBookListId(bookListId);
         return new ResponseEntity<>(job, HttpStatus.OK);
@@ -35,7 +35,15 @@ public class BookController {
 
     @GetMapping()
     @CrossOrigin(origins = "http://localhost:3000")
-    public ResponseEntity<List<BookDto>> getBooksByGenreId(@RequestParam Long genreId) {
-        return new ResponseEntity<>(bookService.findBooksByGenreId(genreId), HttpStatus.OK);
+    public ResponseEntity<List<BookDto>> getBooksByGenreId(
+            @RequestParam Long genreId,
+            @RequestParam(defaultValue = "1") Integer pageNumber) {
+        return new ResponseEntity<>(bookService.findBooksByGenreId(genreId, pageNumber), HttpStatus.OK);
+    }
+
+    @GetMapping("/count")
+    @CrossOrigin(origins = "http://localhost:3000")
+    public ResponseEntity<Integer> countBooksByGenreId(@RequestParam Long genreId) {
+        return new ResponseEntity<>(bookService.countBooksByGenreId(genreId), HttpStatus.OK);
     }
 }
