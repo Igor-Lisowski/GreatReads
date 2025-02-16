@@ -24,7 +24,7 @@ export const bookApi = createApi({
       query: (args: { genreId: number; pageNumber: number }) =>
         `book?genreId=${args.genreId}&pageNumber=${args.pageNumber}`,
     }),
-    countBooksByGenreId: builder.query<Book[], number>({
+    countBooksByGenreId: builder.query<number, number>({
       query: (genreId) => `book/count?genreId=${genreId}`,
     }),
   }),
