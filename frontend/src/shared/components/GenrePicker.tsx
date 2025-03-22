@@ -1,4 +1,4 @@
-import { Autocomplete, Box, Button, TextField } from "@mui/material";
+import { Autocomplete, Box, TextField } from "@mui/material";
 import { useGetGenresQuery } from "shared/api/genreApi";
 import { formatGenres } from "shared/utils/formatGenres";
 
@@ -20,15 +20,12 @@ function GenrePicker({ onGenreChange }: GenrePickerProps) {
           <Autocomplete
             disablePortal
             options={formatGenres(data)}
-            sx={{ width: "70%", marginRight: "16px" }}
+            sx={{ width: "100%" }}
             renderInput={(params) => <TextField {...params} label="Genre" />}
             onChange={(_, value) => {
               onGenreChange(value?.genre.id);
             }}
           />
-          <Button sx={{ width: "calc(30% - 16px)" }} variant="contained">
-            Search
-          </Button>
         </>
       ) : null}
     </Box>
